@@ -6,6 +6,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+PACKAGE = ROOT / "korea-transit-planner"
 SPEC = importlib.util.spec_from_file_location("validator", ROOT / "scripts" / "validate.py")
 assert SPEC and SPEC.loader
 validator = importlib.util.module_from_spec(SPEC)
@@ -17,27 +18,27 @@ class SkillContractTests(unittest.TestCase):
         self.assertEqual([], validator.contract_errors(ROOT))
 
     def test_frontmatter_identity_and_version(self):
-        values = validator.parse_frontmatter((ROOT / "SKILL.md").read_text(encoding="utf-8"))
+        values = validator.parse_frontmatter((PACKAGE / "SKILL.md").read_text(encoding="utf-8"))
         self.assertEqual("korea-transit-planner", values["name"])
         self.assertEqual("0.1.0", values["version"])
         self.assertEqual("MIT", values["license"])
 
     def test_explicit_origin_has_precedence_and_no_default(self):
-        text = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        text = (PACKAGE / "SKILL.md").read_text(encoding="utf-8")
         self.assertIn("Explicit origin; it overrides every inferred or stored location.", text)
         self.assertIn("Do not use this skill until an origin is known.", text)
         self.assertNotIn("Default origin", text)
         self.assertNotIn("default origin", text)
 
     def test_gtx_is_strictly_opt_in(self):
-        skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
-        gtx = (ROOT / "references" / "gtx-routing.md").read_text(encoding="utf-8")
+        skill = (PACKAGE / "SKILL.md").read_text(encoding="utf-8")
+        gtx = (PACKAGE / "references" / "gtx-routing.md").read_text(encoding="utf-8")
         self.assertIn("If and only if the user explicitly mentions GTX or names a GTX station", skill)
         self.assertIn("Otherwise perform no GTX lookup or comparison.", skill)
         self.assertIn("Never research or compare GTX proactively", gtx)
 
     def test_required_modes_are_covered(self):
-        text = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        text = (PACKAGE / "SKILL.md").read_text(encoding="utf-8")
         for term in ("ordinary subway", "city/intercity bus", "마을버스", "누리버스/DRT", "walking", "taxi", "mixed"):
             with self.subTest(term=term):
                 self.assertIn(term, text)
@@ -58,7 +59,7 @@ class SkillContractTests(unittest.TestCase):
         self.assertTrue(any("generic-secret-assignment" in item for item in findings))
 
     def test_every_installable_reference_is_linked_and_present(self):
-        skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        skill = (PACKAGE / "SKILL.md").read_text(encoding="utf-8")
         for rel in (
             "references/map-routing.md",
             "references/source-verification.md",
@@ -68,7 +69,7 @@ class SkillContractTests(unittest.TestCase):
         ):
             with self.subTest(rel=rel):
                 self.assertIn(f"]({rel})", skill)
-                self.assertTrue((ROOT / rel).is_file())
+                self.assertTrue((PACKAGE / rel).is_file())
 
 
 if __name__ == "__main__":

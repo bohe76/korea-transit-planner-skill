@@ -38,19 +38,19 @@ English overview: [README.en.md](README.en.md)
 먼저 내용을 검토하세요.
 
 ```bash
-hermes skills inspect bohe76/korea-transit-planner-skill
+hermes skills inspect bohe76/korea-transit-planner-skill/korea-transit-planner
 ```
 
 검토 후 설치합니다.
 
 ```bash
-hermes skills install bohe76/korea-transit-planner-skill
+hermes skills install bohe76/korea-transit-planner-skill/korea-transit-planner
 ```
 
 직접 URL 설치도 가능합니다.
 
 ```bash
-hermes skills install https://raw.githubusercontent.com/bohe76/korea-transit-planner-skill/main/SKILL.md
+hermes skills install https://raw.githubusercontent.com/bohe76/korea-transit-planner-skill/main/korea-transit-planner/SKILL.md
 ```
 
 Hermes Agent 최신 스킬 문서: <https://hermes-agent.nousresearch.com/docs/user-guide/features/skills>
@@ -78,14 +78,14 @@ GTX를 비교하려면 명시적으로 요청합니다.
 같은 도착 시각 기준으로 일반 지하철과 비교해 줘.
 ```
 
-응답 구조 예시: [examples/route-briefing.md](examples/route-briefing.md)
+응답 구조 예시: [examples/route-briefing.md](korea-transit-planner/examples/route-briefing.md)
 
 ## 데이터와 검증
 
-- [지도 경로 후보 검증](references/map-routing.md)
-- [공식/보조 출처 우선순위](references/source-verification.md)
-- [GTX 옵트인 절차](references/gtx-routing.md)
-- [마을버스·누리버스·DRT 확인](references/local-modes.md)
+- [지도 경로 후보 검증](korea-transit-planner/references/map-routing.md)
+- [공식/보조 출처 우선순위](korea-transit-planner/references/source-verification.md)
+- [GTX 옵트인 절차](korea-transit-planner/references/gtx-routing.md)
+- [마을버스·누리버스·DRT 확인](korea-transit-planner/references/local-modes.md)
 
 지도 서비스의 이용약관을 준수하세요. 이 저장소는 스크래핑한 독점 데이터나 지도 자산을 재배포하지 않습니다.
 

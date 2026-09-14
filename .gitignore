@@ -2,4 +2,5 @@ __pycache__/
 *.py[cod]
 .venv/
 venv/
+.tmp-hermes/
 .DS_Store

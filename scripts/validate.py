@@ -9,18 +9,18 @@ import sys
 from pathlib import Path
 
 EXPECTED_FILES = (
-    "SKILL.md",
+    "korea-transit-planner/SKILL.md",
     "README.md",
     "README.en.md",
     "LICENSE",
     "CHANGELOG.md",
     "CONTRIBUTING.md",
     "SECURITY.md",
-    "references/map-routing.md",
-    "references/source-verification.md",
-    "references/gtx-routing.md",
-    "references/local-modes.md",
-    "examples/route-briefing.md",
+    "korea-transit-planner/references/map-routing.md",
+    "korea-transit-planner/references/source-verification.md",
+    "korea-transit-planner/references/gtx-routing.md",
+    "korea-transit-planner/references/local-modes.md",
+    "korea-transit-planner/examples/route-briefing.md",
     ".github/workflows/ci.yml",
     ".github/ISSUE_TEMPLATE/bug_report.yml",
     ".github/ISSUE_TEMPLATE/feature_request.yml",
@@ -66,7 +66,8 @@ def parse_frontmatter(text: str) -> dict[str, str]:
 
 def iter_text_files(root: Path):
     for path in sorted(root.rglob("*")):
-        if not path.is_file() or ".git" in path.parts or "__pycache__" in path.parts:
+        relative_parts = path.relative_to(root).parts
+        if not path.is_file() or any(part in {".git", ".tmp-hermes", "__pycache__"} for part in relative_parts):
             continue
         if path.suffix.lower() in TEXT_SUFFIXES:
             yield path
@@ -96,7 +97,8 @@ def contract_errors(root: Path) -> list[str]:
         if not (root / rel).is_file():
             errors.append(f"missing required file: {rel}")
 
-    skill_path = root / "SKILL.md"
+    package = root / "korea-transit-planner"
+    skill_path = package / "SKILL.md"
     if not skill_path.is_file():
         return errors
     skill = skill_path.read_text(encoding="utf-8")
@@ -135,7 +137,8 @@ def contract_errors(root: Path) -> list[str]:
         "Otherwise perform no GTX lookup or comparison.",
         "GTX routing — explicit opt-in only",
     )
-    combined_gtx = skill + "\n" + (root / "references/gtx-routing.md").read_text(encoding="utf-8") if (root / "references/gtx-routing.md").is_file() else skill
+    gtx_path = package / "references" / "gtx-routing.md"
+    combined_gtx = skill + "\n" + gtx_path.read_text(encoding="utf-8") if gtx_path.is_file() else skill
     for clause in gtx_clauses:
         if clause not in combined_gtx:
             errors.append(f"missing GTX opt-in contract: {clause}")
@@ -182,7 +185,7 @@ def contract_errors(root: Path) -> list[str]:
     for rel in missing_links:
         errors.append(f"support file is not linked from SKILL.md: {rel}")
     for rel in sorted(linked):
-        if not (root / rel).is_file():
+        if not (package / rel).is_file():
             errors.append(f"linked support file does not exist: {rel}")
 
     errors.extend(privacy_findings(root))
