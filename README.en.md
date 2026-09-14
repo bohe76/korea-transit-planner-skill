@@ -43,13 +43,33 @@ hermes skills install https://raw.githubusercontent.com/bohe76/korea-transit-pla
 
 For current Hermes documentation, see <https://hermes-agent.nousresearch.com/docs/user-guide/features/skills>.
 
-## Use with another agent runtime
+## Use with Codex and Claude Code
 
-This is a `SKILL.md`-centered text procedure. Confirm that your runtime supports the [Agent Skills specification](https://agentskills.io/specification) and local reference files, then clone the repository or use that runtime's install method. Compatibility with non-Hermes runtimes is not guaranteed without verification.
+This repository uses the Agent Skills format: a `SKILL.md` plus reference files. **Only Hermes Agent installation has been exercised for this repository.** The Codex and Claude Code directions below follow their official local-skill documentation; they do not claim that a repository URL is a one-click installation for every product.
+
+### Codex
+
+The [official Codex Skills documentation](https://developers.openai.com/codex/skills) says Codex discovers skill folders in repository `.agents/skills/` locations and in `~/.agents/skills/` for a user-wide scope. Clone this repository, then copy or symlink the skill directory itself:
 
 ```bash
 git clone https://github.com/bohe76/korea-transit-planner-skill.git
+mkdir -p ~/.agents/skills
+cp -R korea-transit-planner-skill/korea-transit-planner ~/.agents/skills/
 ```
+
+For project-only use, place that folder at `<project>/.agents/skills/korea-transit-planner/` and launch Codex within that project. `$skill-installer` is Codex’s built-in installation helper, but this public repository has not been live-tested as a `$skill-installer` source. For reusable distribution beyond a local/repository skill, review Codex’s plugin distribution workflow.
+
+### Claude Code
+
+The [official Claude Code Skills documentation](https://code.claude.com/docs/en/skills) specifies `~/.claude/skills/<skill-name>/SKILL.md` for a personal skill and `.claude/skills/<skill-name>/SKILL.md` for a project skill. This is an example standalone-skill placement:
+
+```bash
+git clone https://github.com/bohe76/korea-transit-planner-skill.git
+mkdir -p ~/.claude/skills
+cp -R korea-transit-planner-skill/korea-transit-planner ~/.claude/skills/
+```
+
+For a team, commit the same folder under `.claude/skills/korea-transit-planner/`. A standalone skill is discovered directly from the filesystem; a plugin/marketplace is a separate packaging and distribution mechanism that can bundle skills with agents, hooks, or MCP. This repository is not currently packaged or verified as a Claude Code plugin or marketplace entry. If that is required, follow Claude Code’s [plugin marketplace documentation](https://code.claude.com/docs/en/discover-plugins).
 
 ## Example request
 

@@ -64,13 +64,33 @@ hermes skills install https://raw.githubusercontent.com/bohe76/korea-transit-pla
 
 Hermes Agent 최신 스킬 문서: <https://hermes-agent.nousresearch.com/docs/user-guide/features/skills>
 
-## 다른 에이전트에서 사용
+## Codex와 Claude Code에서 사용
 
-이 스킬은 `SKILL.md` 중심의 텍스트 절차입니다. 사용하는 런타임이 [Agent Skills 사양](https://agentskills.io/specification)과 로컬 참조 파일 로딩을 지원하는지 확인한 뒤 저장소를 복제하거나 해당 런타임의 설치 방식을 따르세요. 특정 런타임과의 호환성은 실제 검증 없이 보장하지 않습니다.
+이 저장소는 `SKILL.md`와 참조 파일로 구성된 Agent Skills 형식입니다. **현재 실제 설치 검증은 Hermes Agent만** 했습니다. 아래 Codex·Claude Code 안내는 각 공식 문서의 로컬 스킬 경로를 따른 것이며, 이 저장소 URL을 모든 제품에서 원클릭 설치할 수 있다는 뜻이 아닙니다.
+
+### Codex
+
+[OpenAI Codex Skills 문서](https://developers.openai.com/codex/skills)에 따르면 Codex는 저장소의 `.agents/skills/`와 개인 범위의 `~/.agents/skills/`에서 스킬 폴더를 찾습니다. 이 저장소를 복제한 뒤 아래처럼 스킬 디렉터리 자체를 복사하거나 심볼릭 링크로 연결하세요. `$skill-installer`는 Codex에 내장된 설치 도우미이지만, 이 공개 저장소를 그 도우미가 직접 설치 가능한 소스로 실제 검증한 것은 아닙니다.
 
 ```bash
 git clone https://github.com/bohe76/korea-transit-planner-skill.git
+mkdir -p ~/.agents/skills
+cp -R korea-transit-planner-skill/korea-transit-planner ~/.agents/skills/
 ```
+
+프로젝트에만 적용하려면 `<project>/.agents/skills/korea-transit-planner/`에 같은 폴더를 두고 Codex를 그 프로젝트 안에서 실행하세요. 여러 스킬을 재사용 가능하게 배포하려면 Codex의 플러그인 배포 방식을 검토하세요.
+
+### Claude Code
+
+[Claude Code Skills 문서](https://code.claude.com/docs/en/skills)에 따르면 개인 스킬은 `~/.claude/skills/<skill-name>/SKILL.md`, 프로젝트 스킬은 `.claude/skills/<skill-name>/SKILL.md`에 둡니다. 아래는 독립 스킬로 사용하는 파일 배치 예입니다.
+
+```bash
+git clone https://github.com/bohe76/korea-transit-planner-skill.git
+mkdir -p ~/.claude/skills
+cp -R korea-transit-planner-skill/korea-transit-planner ~/.claude/skills/
+```
+
+팀과 공유하려면 `.claude/skills/korea-transit-planner/`에 넣어 버전 관리합니다. 독립 스킬은 로컬 파일을 직접 발견하는 방식이고, 플러그인/마켓플레이스는 스킬뿐 아니라 에이전트·훅·MCP 등을 묶어 설치·배포하는 별도 방식입니다. 이 저장소는 현재 Claude Code 플러그인 또는 마켓플레이스로 패키징·검증되어 있지 않습니다. 플러그인이 필요하면 [마켓플레이스 설치 문서](https://code.claude.com/docs/en/discover-plugins)를 따르세요.
 
 ## 요청 예시
 
