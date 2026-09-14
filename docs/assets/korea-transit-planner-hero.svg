@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
+  <title id="title">korea-transit-planner</title>
+  <desc id="desc">A restrained abstract route diagram for a Korean transit planning skill.</desc>
+  <rect width="1280" height="640" fill="#ffffff"/>
+  <rect x="56" y="56" width="1168" height="528" rx="28" fill="#ffffff" stroke="#eaeaea" stroke-width="2"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M178 406 C310 406 314 242 448 242 S614 404 742 404 S880 206 1035 206" stroke="#171717" stroke-width="8"/>
+    <path d="M178 406 C310 406 314 242 448 242 S614 404 742 404 S880 206 1035 206" stroke="#0072f5" stroke-width="3" stroke-dasharray="2 18"/>
+    <path d="M178 406 L306 406" stroke="#bdbdbd" stroke-width="4" stroke-dasharray="2 14"/>
+    <path d="M906 300 L1035 206" stroke="#bdbdbd" stroke-width="4" stroke-dasharray="2 14"/>
+  </g>
+  <g fill="#ffffff" stroke="#171717" stroke-width="7">
+    <circle cx="178" cy="406" r="18"/>
+    <circle cx="448" cy="242" r="18"/>
+    <circle cx="742" cy="404" r="18"/>
+    <circle cx="1035" cy="206" r="18"/>
+  </g>
+  <circle cx="178" cy="406" r="8" fill="#0072f5"/>
+  <circle cx="1035" cy="206" r="8" fill="#0072f5"/>
+  <g font-family="Arial, 'Noto Sans KR', sans-serif" fill="#171717">
+    <text x="112" y="142" font-size="25" font-weight="700" letter-spacing="2">KOREA TRANSIT PLANNER</text>
+    <text x="112" y="188" font-size="20" fill="#666666">explicit origin · same-time comparison · verified sources</text>
+  </g>
+  <g font-family="monospace" font-size="16" fill="#666666">
+    <text x="136" y="466">ORIGIN</text>
+    <text x="394" y="198">TRANSFER</text>
+    <text x="689" y="462">BUFFER</text>
+    <text x="978" y="162">DESTINATION</text>
+  </g>
+  <rect x="112" y="514" width="1056" height="1" fill="#eaeaea"/>
+  <g font-family="monospace" font-size="16" fill="#666666">
+    <text x="112" y="550">SUBWAY · BUS · LOCAL MODES · WALK · TAXI · MIXED</text>
+    <text x="1013" y="550">MIT</text>
+  </g>
+</svg>

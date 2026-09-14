@@ -15,6 +15,7 @@ Contributions that make Korean transit planning more accurate, transparent, acce
 Python 3.9+ is sufficient; the checks use only the standard library.
 
 ```bash
+python scripts/validate_agent_skill.py korea-transit-planner
 python scripts/validate.py .
 python -m unittest discover -s tests -v
 ```
@@ -37,4 +38,4 @@ Generalized, privacy-safe lessons from real-world use may become releases after 
 - [ ] Official facts have an official source or a clearly labeled fallback.
 - [ ] GTX remains explicit opt-in.
 - [ ] Named station constraints and same-time comparisons remain intact.
-- [ ] Both validation commands pass.
+- [ ] All three validation commands pass.
