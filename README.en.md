@@ -21,55 +21,62 @@ A Korean-first agent skill for comparing door-to-door transit routes in Korea on
 - Volatile facts carry a check time and time zone; estimates are labeled as estimates.
 - **GTX is strictly opt-in:** it is researched or compared only when the user explicitly says `GTX` or names a GTX station.
 
-## Install with Hermes Agent
+## Install, invoke, and update
 
-Inspect before installing:
+This repository uses a `SKILL.md` plus local references under the [Agent Skills specification](https://agentskills.io/specification). **Install the entire `korea-transit-planner/` directory.** Saving only the raw `SKILL.md` with `curl` or `wget` omits `references/` and `examples/` and is not a complete installation.
+
+### Hermes Agent
 
 ```bash
 hermes skills inspect bohe76/korea-transit-planner-skill/korea-transit-planner
-```
-
-Then install:
-
-```bash
 hermes skills install bohe76/korea-transit-planner-skill/korea-transit-planner
+hermes -s korea-transit-planner
+hermes skills check
+hermes skills update
 ```
 
-Or use the direct `SKILL.md` URL:
+Hermes v0.21.2 was verified to preserve linked local references for both its GitHub identifier and URL installer. A generic raw-file download is not supported. [Hermes Skills documentation](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills)
+
+### OpenAI Codex
+
+Personal install following [Codex Agent Skills](https://developers.openai.com/codex/skills) and [discovery/customization](https://developers.openai.com/codex/concepts/customization):
 
 ```bash
-hermes skills install https://raw.githubusercontent.com/bohe76/korea-transit-planner-skill/main/korea-transit-planner/SKILL.md
-```
-
-For current Hermes documentation, see <https://hermes-agent.nousresearch.com/docs/user-guide/features/skills>.
-
-## Use with Codex and Claude Code
-
-This repository uses the Agent Skills format: a `SKILL.md` plus reference files. **Only Hermes Agent installation has been exercised for this repository.** The Codex and Claude Code directions below follow their official local-skill documentation; they do not claim that a repository URL is a one-click installation for every product.
-
-### Codex
-
-The [official Codex Skills documentation](https://developers.openai.com/codex/skills) says Codex discovers skill folders in repository `.agents/skills/` locations and in `~/.agents/skills/` for a user-wide scope. Clone this repository, then copy or symlink the skill directory itself:
-
-```bash
-git clone https://github.com/bohe76/korea-transit-planner-skill.git
+git clone https://github.com/bohe76/korea-transit-planner-skill.git ~/.local/share/korea-transit-planner-skill
 mkdir -p ~/.agents/skills
-cp -R korea-transit-planner-skill/korea-transit-planner ~/.agents/skills/
+ln -s ~/.local/share/korea-transit-planner-skill/korea-transit-planner ~/.agents/skills/korea-transit-planner
+
+# Invoke in Codex: $korea-transit-planner compare a trip from ...
+git -C ~/.local/share/korea-transit-planner-skill pull --ff-only
 ```
 
-For project-only use, place that folder at `<project>/.agents/skills/korea-transit-planner/` and launch Codex within that project. `$skill-installer` is Codex’s built-in installation helper, but this public repository has not been live-tested as a `$skill-installer` source. For reusable distribution beyond a local/repository skill, review Codex’s plugin distribution workflow.
+For project scope, copy or link the same complete folder at `<project>/.agents/skills/korea-transit-planner/`. `$skill-installer` can accept skills from other repositories, but v0.1.0 was verified through the official filesystem discovery paths above. Codex plugins are a separate distribution format; this single-skill release avoids a duplicate package.
 
 ### Claude Code
 
-The [official Claude Code Skills documentation](https://code.claude.com/docs/en/skills) specifies `~/.claude/skills/<skill-name>/SKILL.md` for a personal skill and `.claude/skills/<skill-name>/SKILL.md` for a project skill. This is an example standalone-skill placement:
+Personal install following [Claude Code Skills](https://docs.anthropic.com/en/docs/claude-code/skills):
 
 ```bash
-git clone https://github.com/bohe76/korea-transit-planner-skill.git
+git clone https://github.com/bohe76/korea-transit-planner-skill.git ~/.local/share/korea-transit-planner-skill
 mkdir -p ~/.claude/skills
-cp -R korea-transit-planner-skill/korea-transit-planner ~/.claude/skills/
+ln -s ~/.local/share/korea-transit-planner-skill/korea-transit-planner ~/.claude/skills/korea-transit-planner
+
+# Invoke in Claude Code: /korea-transit-planner compare a trip from ...
+git -C ~/.local/share/korea-transit-planner-skill pull --ff-only
 ```
 
-For a team, commit the same folder under `.claude/skills/korea-transit-planner/`. A standalone skill is discovered directly from the filesystem; a plugin/marketplace is a separate packaging and distribution mechanism that can bundle skills with agents, hooks, or MCP. This repository is not currently packaged or verified as a Claude Code plugin or marketplace entry. If that is required, follow Claude Code’s [plugin marketplace documentation](https://code.claude.com/docs/en/discover-plugins).
+For project scope, copy or link the same complete folder at `<project>/.claude/skills/korea-transit-planner/`. [Claude Code Plugins](https://docs.anthropic.com/en/docs/claude-code/plugins) are a separate marketplace/bundle mechanism for skills plus agents, hooks, or MCP. Manual skill installation is sufficient here, so v0.1.0 does not duplicate the skill as a plugin.
+
+### Verified scope
+
+| Environment | Result |
+|---|---|
+| Hermes Agent v0.21.2, BOVIS WSL | GitHub identifier/URL installation, complete references, and load check passed |
+| Codex CLI 0.154.0, BOVIS laptop WSL | Clean personal and project discovery, frontmatter 0.1.0, and reference access passed |
+| Claude Code 2.1.270, BOVIS laptop WSL | Complete-folder placement and format passed; independent runtime test was blocked by expired local OAuth (HTTP 401) |
+| User desktop PC, then-current Codex and Claude Code | Both products discovered, invoked, and used the skill successfully (user attestation); exact binary versions were not captured |
+
+CI separately validates the shared Agent Skills frontmatter, directory name, and packaged local references. It does not guarantee runtime authentication or model availability.
 
 ## Example request
 
@@ -105,6 +112,7 @@ Respect map-service terms. This repository does not redistribute scraped proprie
 Python 3.9+ and no external packages are required:
 
 ```bash
+python scripts/validate_agent_skill.py korea-transit-planner
 python scripts/validate.py .
 python -m unittest discover -s tests -v
 ```

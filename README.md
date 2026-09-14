@@ -42,55 +42,73 @@ English overview: [README.en.md](README.en.md)
 4. 실시간 정보에는 조회 시각과 시간대를 붙이고, 추정치는 추정치라고 표시합니다.
 5. **GTX는 옵트인**입니다. 사용자가 `GTX`를 직접 언급하거나 GTX 역명을 지정한 경우에만 조회·비교합니다.
 
-## 빠른 설치 — Hermes Agent
+## 설치·호출·업데이트
 
-먼저 내용을 검토하세요.
+이 저장소는 [Agent Skills 규격](https://agentskills.io/specification)의 `SKILL.md`와 로컬 참조 파일을 함께 사용합니다. **항상 `korea-transit-planner/` 폴더 전체를 설치하세요.** raw `SKILL.md`만 `curl`/`wget`으로 저장하면 `references/`와 `examples/`가 빠져 완전한 설치가 아닙니다.
+
+### Hermes Agent
 
 ```bash
+# 검토 → 설치
 hermes skills inspect bohe76/korea-transit-planner-skill/korea-transit-planner
-```
-
-검토 후 설치합니다.
-
-```bash
 hermes skills install bohe76/korea-transit-planner-skill/korea-transit-planner
+
+# 명시적으로 로드해 시작
+hermes -s korea-transit-planner
+
+# 업데이트 확인·적용
+hermes skills check
+hermes skills update
 ```
 
-직접 URL 설치도 가능합니다.
+Hermes의 URL 설치기는 연결된 로컬 참조까지 가져오는 것을 v0.21.2에서 검증했지만, 다른 다운로더로 raw 파일 하나만 받는 방식은 지원하지 않습니다. [Hermes Skills 문서](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills)
+
+### OpenAI Codex
+
+[Codex Agent Skills](https://developers.openai.com/codex/skills)와 [discovery/customization](https://developers.openai.com/codex/concepts/customization)에 따른 개인 설치입니다. 복제본을 단일 소스로 두고 전체 폴더를 연결합니다.
 
 ```bash
-hermes skills install https://raw.githubusercontent.com/bohe76/korea-transit-planner-skill/main/korea-transit-planner/SKILL.md
-```
-
-Hermes Agent 최신 스킬 문서: <https://hermes-agent.nousresearch.com/docs/user-guide/features/skills>
-
-## Codex와 Claude Code에서 사용
-
-이 저장소는 `SKILL.md`와 참조 파일로 구성된 Agent Skills 형식입니다. **현재 실제 설치 검증은 Hermes Agent만** 했습니다. 아래 Codex·Claude Code 안내는 각 공식 문서의 로컬 스킬 경로를 따른 것이며, 이 저장소 URL을 모든 제품에서 원클릭 설치할 수 있다는 뜻이 아닙니다.
-
-### Codex
-
-[OpenAI Codex Skills 문서](https://developers.openai.com/codex/skills)에 따르면 Codex는 저장소의 `.agents/skills/`와 개인 범위의 `~/.agents/skills/`에서 스킬 폴더를 찾습니다. 이 저장소를 복제한 뒤 아래처럼 스킬 디렉터리 자체를 복사하거나 심볼릭 링크로 연결하세요. `$skill-installer`는 Codex에 내장된 설치 도우미이지만, 이 공개 저장소를 그 도우미가 직접 설치 가능한 소스로 실제 검증한 것은 아닙니다.
-
-```bash
-git clone https://github.com/bohe76/korea-transit-planner-skill.git
+git clone https://github.com/bohe76/korea-transit-planner-skill.git ~/.local/share/korea-transit-planner-skill
 mkdir -p ~/.agents/skills
-cp -R korea-transit-planner-skill/korea-transit-planner ~/.agents/skills/
+ln -s ~/.local/share/korea-transit-planner-skill/korea-transit-planner ~/.agents/skills/korea-transit-planner
+
+# Codex에서 명시적으로 호출
+# $korea-transit-planner 부산역에서 해운대해수욕장까지 비교해 줘
+
+# 업데이트
+git -C ~/.local/share/korea-transit-planner-skill pull --ff-only
 ```
 
-프로젝트에만 적용하려면 `<project>/.agents/skills/korea-transit-planner/`에 같은 폴더를 두고 Codex를 그 프로젝트 안에서 실행하세요. 여러 스킬을 재사용 가능하게 배포하려면 Codex의 플러그인 배포 방식을 검토하세요.
+프로젝트 범위는 같은 폴더를 `<project>/.agents/skills/korea-transit-planner/`에 복사하거나 연결합니다. `$skill-installer`도 외부 저장소를 받을 수 있지만, v0.1.0 검증 경로는 위의 공식 filesystem discovery입니다. Codex 플러그인은 여러 스킬·도구 배포용 별도 형식이므로 단일 스킬인 이번 릴리스에는 중복 패키지를 넣지 않았습니다.
 
 ### Claude Code
 
-[Claude Code Skills 문서](https://code.claude.com/docs/en/skills)에 따르면 개인 스킬은 `~/.claude/skills/<skill-name>/SKILL.md`, 프로젝트 스킬은 `.claude/skills/<skill-name>/SKILL.md`에 둡니다. 아래는 독립 스킬로 사용하는 파일 배치 예입니다.
+[Claude Code Skills](https://docs.anthropic.com/en/docs/claude-code/skills)에 따른 개인 설치입니다.
 
 ```bash
-git clone https://github.com/bohe76/korea-transit-planner-skill.git
+git clone https://github.com/bohe76/korea-transit-planner-skill.git ~/.local/share/korea-transit-planner-skill
 mkdir -p ~/.claude/skills
-cp -R korea-transit-planner-skill/korea-transit-planner ~/.claude/skills/
+ln -s ~/.local/share/korea-transit-planner-skill/korea-transit-planner ~/.claude/skills/korea-transit-planner
+
+# Claude Code에서 명시적으로 호출
+# /korea-transit-planner 부산역에서 해운대해수욕장까지 비교해 줘
+
+# 업데이트
+git -C ~/.local/share/korea-transit-planner-skill pull --ff-only
 ```
 
-팀과 공유하려면 `.claude/skills/korea-transit-planner/`에 넣어 버전 관리합니다. 독립 스킬은 로컬 파일을 직접 발견하는 방식이고, 플러그인/마켓플레이스는 스킬뿐 아니라 에이전트·훅·MCP 등을 묶어 설치·배포하는 별도 방식입니다. 이 저장소는 현재 Claude Code 플러그인 또는 마켓플레이스로 패키징·검증되어 있지 않습니다. 플러그인이 필요하면 [마켓플레이스 설치 문서](https://code.claude.com/docs/en/discover-plugins)를 따르세요.
+프로젝트 범위는 같은 폴더를 `<project>/.claude/skills/korea-transit-planner/`에 복사하거나 연결합니다. [Claude Code Plugins](https://docs.anthropic.com/en/docs/claude-code/plugins)는 마켓플레이스 설치·에이전트·훅·MCP 번들용 별도 배포 방식입니다. 공식 수동 스킬 설치로 요구사항을 충족하므로 v0.1.0은 플러그인 중복본을 만들지 않습니다.
+
+### 실제 검증 범위
+
+| 환경 | 결과 |
+|---|---|
+| Hermes Agent v0.21.2, BOVIS WSL | GitHub 식별자/URL 설치, 전체 참조 파일, 로드 검사 통과 |
+| Codex CLI 0.154.0, BOVIS 노트북 WSL | 개인 `~/.agents/skills` 및 프로젝트 `.agents/skills` clean discovery, frontmatter 0.1.0, reference access 통과 |
+| Claude Code 2.1.270, BOVIS 노트북 WSL | 전체 폴더 배치·규격 검사는 통과했으나 로컬 OAuth 만료(HTTP 401)로 독립 실행 검증은 미완료 |
+| 사용자 데스크탑 PC의 당시 최신 Codex·Claude Code | 두 제품 모두 discovery·호출·실사용 성공(사용자 확인); 정확한 바이너리 버전은 기록되지 않음 |
+
+CI는 세 런타임이 공유하는 Agent Skills frontmatter, 폴더명, 로컬 참조 존재 여부를 별도 검사합니다. 런타임별 인증·모델 가용성은 CI가 보장하지 않습니다.
 
 ## 요청 예시
 
@@ -137,6 +155,7 @@ GTX를 비교하려면 명시적으로 요청합니다.
 Python 3.9 이상, 외부 패키지 없이 실행됩니다.
 
 ```bash
+python scripts/validate_agent_skill.py korea-transit-planner
 python scripts/validate.py .
 python -m unittest discover -s tests -v
 ```

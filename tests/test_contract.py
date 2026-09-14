@@ -11,9 +11,18 @@ SPEC = importlib.util.spec_from_file_location("validator", ROOT / "scripts" / "v
 assert SPEC and SPEC.loader
 validator = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(validator)
+AGENT_SPEC = importlib.util.spec_from_file_location(
+    "agent_skill_validator", ROOT / "scripts" / "validate_agent_skill.py"
+)
+assert AGENT_SPEC and AGENT_SPEC.loader
+agent_skill_validator = importlib.util.module_from_spec(AGENT_SPEC)
+AGENT_SPEC.loader.exec_module(agent_skill_validator)
 
 
 class SkillContractTests(unittest.TestCase):
+    def test_agent_skills_standard_and_packaged_references(self):
+        self.assertEqual([], agent_skill_validator.agent_skill_errors(PACKAGE))
+
     def test_repository_contract_is_green(self):
         self.assertEqual([], validator.contract_errors(ROOT))
 

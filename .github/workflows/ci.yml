@@ -23,5 +23,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Validate skill contract and privacy
         run: python scripts/validate.py .
+      - name: Validate portable Agent Skills package
+        run: python scripts/validate_agent_skill.py korea-transit-planner
       - name: Run deterministic tests
         run: python -m unittest discover -s tests -v

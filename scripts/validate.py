@@ -21,6 +21,7 @@ EXPECTED_FILES = (
     "korea-transit-planner/references/gtx-routing.md",
     "korea-transit-planner/references/local-modes.md",
     "korea-transit-planner/examples/route-briefing.md",
+    "scripts/validate_agent_skill.py",
     ".github/workflows/ci.yml",
     ".github/ISSUE_TEMPLATE/bug_report.yml",
     ".github/ISSUE_TEMPLATE/feature_request.yml",
