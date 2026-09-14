@@ -89,4 +89,4 @@ Use the reusable [route briefing example](examples/route-briefing.md) as a shape
 
 ## Verification
 
-Before answering, confirm that the origin is explicit, constrained stations remain in the route, all compared modes use one time basis, every total includes first/last mile and waits, live facts carry a timestamp, and uncertainty is field-specific. Repository maintainers can run `python scripts/validate.py .` and `python -m unittest discover -s tests -v` through the `terminal` tool.
+Before answering, confirm that the origin is explicit, constrained stations remain in the route, all compared modes use one time basis, every total includes first/last mile and waits, live facts carry a timestamp, and uncertainty is field-specific. In a repository checkout, maintainers can run `python scripts/validate.py .` and `python -m unittest discover -s tests -v` from the repository root through the `terminal` tool.
